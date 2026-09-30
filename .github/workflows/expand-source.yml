@@ -1,0 +1,34 @@
+name: Expand generated plugin source
+
+on:
+  push:
+    paths:
+      - 'gradebookdoctor.tar.xz.b64'
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Expand source snapshot
+        run: |
+          base64 -d gradebookdoctor.tar.xz.b64 > /tmp/gradebookdoctor.tar.xz
+          rm -rf /tmp/gradebookdoctor
+          tar -xJf /tmp/gradebookdoctor.tar.xz -C /tmp
+          cp -a /tmp/gradebookdoctor/. .
+          rm -f gradebookdoctor.tar.xz.b64 .github/workflows/expand-source.yml
+      - name: Commit exact source tree
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Expand complete local_gradebookdoctor source"
+          git push origin HEAD:main
