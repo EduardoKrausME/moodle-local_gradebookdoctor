@@ -1,0 +1,28 @@
+name: Moodle Plugin Validate
+
+on: [push, pull_request]
+
+concurrency:
+  group: moodle-plugin-validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: PHP syntax check
+        run: find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Validate Moodle plugin
+        uses: EduardoKrausME/moodle-plugin-validate@main
+        with:
+          plugin: .
