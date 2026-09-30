@@ -1,0 +1,17 @@
+.local-gradebookdoctor .table td,
+.local-gradebookdoctor .table th {
+    vertical-align: middle;
+}
+
+.local-gradebookdoctor .gradebookdoctor-flags .badge {
+    margin: .1rem .15rem .1rem 0;
+}
+
+.local-gradebookdoctor .gradebookdoctor-ai p:last-child {
+    margin-bottom: 0;
+}
+
+.local-gradebookdoctor code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}

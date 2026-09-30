@@ -1,0 +1,272 @@
+<div class="local-gradebookdoctor">
+    <div class="alert alert-info mb-4" role="status">
+        {{#str}}intro, local_gradebookdoctor{{/str}}
+    </div>
+
+    <ul class="nav nav-tabs mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{#isexplaintab}}active{{/isexplaintab}}" href="{{explainurl}}">
+                {{#str}}tab:explain, local_gradebookdoctor{{/str}}
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{#isdiagnosetab}}active{{/isdiagnosetab}}" href="{{diagnoseurl}}">
+                {{#str}}tab:diagnose, local_gradebookdoctor{{/str}}
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{#iscomparetab}}active{{/iscomparetab}}" href="{{compareurl}}">
+                {{#str}}tab:compare, local_gradebookdoctor{{/str}}
+            </a>
+        </li>
+    </ul>
+
+    {{#isexplaintab}}
+        <div class="card mb-4">
+            <div class="card-body">
+                {{^hasusers}}<div class="alert alert-warning">{{#str}}nousers, local_gradebookdoctor{{/str}}</div>{{/hasusers}}
+                {{^hasitems}}<div class="alert alert-warning">{{#str}}noitems, local_gradebookdoctor{{/str}}</div>{{/hasitems}}
+                {{#hasusers}}{{#hasitems}}
+                <form method="post" action="{{actionurl}}" class="row g-3 align-items-end">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <input type="hidden" name="courseid" value="{{courseid}}">
+                    <input type="hidden" name="mode" value="explain">
+                    <input type="hidden" name="run" value="1">
+                    <div class="col-lg-5">
+                        <label class="form-label" for="gbd-user">{{#str}}selectuser, local_gradebookdoctor{{/str}}</label>
+                        <select class="form-select" id="gbd-user" name="userid" required>
+                            <option value=""></option>
+                            {{#users}}<option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>{{/users}}
+                        </select>
+                    </div>
+                    <div class="col-lg-5">
+                        <label class="form-label" for="gbd-item">{{#str}}selectitem, local_gradebookdoctor{{/str}}</label>
+                        <select class="form-select" id="gbd-item" name="itemid" required>
+                            <option value=""></option>
+                            {{#items}}<option value="{{id}}" {{#selected}}selected{{/selected}}>{{label}}</option>{{/items}}
+                        </select>
+                    </div>
+                    <div class="col-lg-2 d-grid">
+                        <button class="btn btn-primary" type="submit">{{#str}}run:explain, local_gradebookdoctor{{/str}}</button>
+                    </div>
+                </form>
+                {{/hasitems}}{{/hasusers}}
+            </div>
+        </div>
+    {{/isexplaintab}}
+
+    {{#isdiagnosetab}}
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>{{#str}}diagnosis:boundary, local_gradebookdoctor{{/str}}</div>
+                <form method="post" action="{{actionurl}}">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <input type="hidden" name="courseid" value="{{courseid}}">
+                    <input type="hidden" name="mode" value="diagnose">
+                    <input type="hidden" name="run" value="1">
+                    <button class="btn btn-primary" type="submit">{{#str}}run:diagnose, local_gradebookdoctor{{/str}}</button>
+                </form>
+            </div>
+        </div>
+    {{/isdiagnosetab}}
+
+    {{#iscomparetab}}
+        <div class="card mb-4">
+            <div class="card-body">
+                {{^hasusers}}<div class="alert alert-warning">{{#str}}nousers, local_gradebookdoctor{{/str}}</div>{{/hasusers}}
+                {{^hasitems}}<div class="alert alert-warning">{{#str}}noitems, local_gradebookdoctor{{/str}}</div>{{/hasitems}}
+                {{#hasusers}}{{#hasitems}}
+                <form method="post" action="{{actionurl}}" class="row g-3 align-items-end">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <input type="hidden" name="courseid" value="{{courseid}}">
+                    <input type="hidden" name="mode" value="compare">
+                    <input type="hidden" name="run" value="1">
+                    <div class="col-lg-3">
+                        <label class="form-label" for="gbd-user-a">{{#str}}selectusera, local_gradebookdoctor{{/str}}</label>
+                        <select class="form-select" id="gbd-user-a" name="userida" required>
+                            <option value=""></option>
+                            {{#users}}<option value="{{id}}" {{#selecteda}}selected{{/selecteda}}>{{name}}</option>{{/users}}
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label" for="gbd-user-b">{{#str}}selectuserb, local_gradebookdoctor{{/str}}</label>
+                        <select class="form-select" id="gbd-user-b" name="useridb" required>
+                            <option value=""></option>
+                            {{#users}}<option value="{{id}}" {{#selectedb}}selected{{/selectedb}}>{{name}}</option>{{/users}}
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="form-label" for="gbd-compare-item">{{#str}}selectitem, local_gradebookdoctor{{/str}}</label>
+                        <select class="form-select" id="gbd-compare-item" name="itemid" required>
+                            <option value=""></option>
+                            {{#items}}<option value="{{id}}" {{#selected}}selected{{/selected}}>{{label}}</option>{{/items}}
+                        </select>
+                    </div>
+                    <div class="col-lg-2 d-grid">
+                        <button class="btn btn-primary" type="submit">{{#str}}run:compare, local_gradebookdoctor{{/str}}</button>
+                    </div>
+                </form>
+                {{/hasitems}}{{/hasusers}}
+            </div>
+        </div>
+    {{/iscomparetab}}
+
+    {{#result}}
+        {{#type_explain}}
+            <div class="card mb-4 border-primary">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <strong>{{#str}}section:moodlecalculation, local_gradebookdoctor{{/str}}</strong>
+                    <span>{{rootlabel}}: <strong>{{finalgrade}}</strong> / {{range}}</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">{{#str}}deterministic:boundary, local_gradebookdoctor{{/str}}</p>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>{{#str}}item, local_gradebookdoctor{{/str}}</th>
+                                    <th>{{#str}}finalgrade, local_gradebookdoctor{{/str}}</th>
+                                    <th>{{#str}}status, local_gradebookdoctor{{/str}}</th>
+                                    <th>{{#str}}weight, local_gradebookdoctor{{/str}}</th>
+                                    <th>{{#str}}aggregation, local_gradebookdoctor{{/str}}</th>
+                                    <th>{{#str}}flags, local_gradebookdoctor{{/str}}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#rows}}
+                                <tr>
+                                    <td style="padding-left: {{indentrem}}rem">
+                                        <div><strong>#{{itemid}}</strong> {{label}}</div>
+                                        {{#hasformula}}<div class="small text-muted text-break">{{#str}}formula, local_gradebookdoctor{{/str}}: <code>{{formula}}</code></div>{{/hasformula}}
+                                    </td>
+                                    <td>{{finalgrade}}</td>
+                                    <td><span class="{{statusclass}}">{{aggregationstatus}}</span></td>
+                                    <td>{{weight}}</td>
+                                    <td>{{aggregation}}</td>
+                                    <td class="gradebookdoctor-flags">
+                                        {{#hidden}}<span class="badge bg-secondary">{{#str}}flag:hidden, local_gradebookdoctor{{/str}}</span>{{/hidden}}
+                                        {{#excluded}}<span class="badge bg-warning text-dark">{{#str}}flag:excluded, local_gradebookdoctor{{/str}}</span>{{/excluded}}
+                                        {{#overridden}}<span class="badge bg-danger">{{#str}}flag:overridden, local_gradebookdoctor{{/str}}</span>{{/overridden}}
+                                        {{#locked}}<span class="badge bg-dark">{{#str}}flag:locked, local_gradebookdoctor{{/str}}</span>{{/locked}}
+                                        {{#needsupdate}}<span class="badge bg-warning text-dark">{{#str}}flag:needsupdate, local_gradebookdoctor{{/str}}</span>{{/needsupdate}}
+                                        {{#extracredit}}<span class="badge bg-info text-dark">{{#str}}flag:extracredit, local_gradebookdoctor{{/str}}</span>{{/extracredit}}
+                                    </td>
+                                    <td><a href="{{editurl}}">{{#str}}edit, local_gradebookdoctor{{/str}}</a></td>
+                                </tr>
+                                {{/rows}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header"><strong>{{#str}}section:aiexplanation, local_gradebookdoctor{{/str}}</strong></div>
+                <div class="card-body">
+                    <p class="text-muted">{{#str}}ai:boundary, local_gradebookdoctor{{/str}}</p>
+                    {{#aiexplanationhtml}}<div class="gradebookdoctor-ai">{{{aiexplanationhtml}}}</div>{{/aiexplanationhtml}}
+                    {{#aierror}}<div class="alert alert-warning mb-0">{{aierror}}</div>{{/aierror}}
+                </div>
+            </div>
+        {{/type_explain}}
+
+        {{#type_diagnose}}
+            <div class="row g-3 mb-4">
+                <div class="col-md-4"><div class="card h-100"><div class="card-body"><div class="text-muted">{{#str}}diagnosis:categories, local_gradebookdoctor{{/str}}</div><div class="display-6">{{summary.categories}}</div></div></div></div>
+                <div class="col-md-4"><div class="card h-100"><div class="card-body"><div class="text-muted">{{#str}}diagnosis:items, local_gradebookdoctor{{/str}}</div><div class="display-6">{{summary.items}}</div></div></div></div>
+                <div class="col-md-4"><div class="card h-100"><div class="card-body"><div class="text-muted">{{#str}}diagnosis:findings, local_gradebookdoctor{{/str}}</div><div class="display-6">{{summary.findings}}</div><small>{{summary.review}} {{#str}}attention:review, local_gradebookdoctor{{/str}} · {{summary.info}} {{#str}}attention:info, local_gradebookdoctor{{/str}}</small></div></div></div>
+            </div>
+
+            <div class="card mb-4 border-primary">
+                <div class="card-header"><strong>{{#str}}section:deterministicdiagnosis, local_gradebookdoctor{{/str}}</strong></div>
+                <div class="card-body">
+                    <p class="text-muted">{{#str}}diagnosis:boundary, local_gradebookdoctor{{/str}}</p>
+                    {{^hasfindings}}<div class="alert alert-success mb-0">{{#str}}nofindings, local_gradebookdoctor{{/str}}</div>{{/hasfindings}}
+                    {{#hasfindings}}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead><tr><th>{{#str}}status, local_gradebookdoctor{{/str}}</th><th>{{#str}}item, local_gradebookdoctor{{/str}}</th><th>{{#str}}diagnosis:findings, local_gradebookdoctor{{/str}}</th><th></th></tr></thead>
+                            <tbody>
+                            {{#findings}}
+                                <tr>
+                                    <td><span class="{{attentionclass}}">{{attentionlabel}}</span></td>
+                                    <td>{{label}}<div class="small text-muted"><code>{{code}}</code></div></td>
+                                    <td>{{evidence}}</td>
+                                    <td><a href="{{url}}">{{#str}}edit, local_gradebookdoctor{{/str}}</a></td>
+                                </tr>
+                            {{/findings}}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{/hasfindings}}
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header"><strong>{{#str}}section:aidiagnosis, local_gradebookdoctor{{/str}}</strong></div>
+                <div class="card-body">
+                    <p class="text-muted">{{#str}}ai:boundary, local_gradebookdoctor{{/str}}</p>
+                    {{#aisummary}}<p>{{aisummary}}</p>{{/aisummary}}
+                    {{#hasaifindings}}
+                        {{#aifindings}}
+                        <div class="border rounded p-3 mb-2">
+                            <div class="d-flex justify-content-between gap-2"><code>{{code}}</code><span class="badge bg-light text-dark border">{{attention}}</span></div>
+                            <div class="mt-2">{{explanation}}</div>
+                            {{#consequence}}<div class="small text-muted mt-1">{{consequence}}</div>{{/consequence}}
+                        </div>
+                        {{/aifindings}}
+                    {{/hasaifindings}}
+                    {{#aierror}}<div class="alert alert-warning mb-0">{{aierror}}</div>{{/aierror}}
+                </div>
+            </div>
+        {{/type_diagnose}}
+
+        {{#type_compare}}
+            <div class="card mb-4 border-primary">
+                <div class="card-header"><strong>{{#str}}section:comparison, local_gradebookdoctor{{/str}}</strong></div>
+                <div class="card-body">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6"><div class="border rounded p-3"><div class="text-muted">{{studentaname}}</div><div class="h3 mb-0">{{afinal}}</div></div></div>
+                        <div class="col-md-6"><div class="border rounded p-3"><div class="text-muted">{{studentbname}}</div><div class="h3 mb-0">{{bfinal}}</div></div></div>
+                    </div>
+                    <div class="mb-3"><strong>{{rootlabel}}</strong></div>
+                    {{^hasdifferences}}<div class="alert alert-success mb-0">{{#str}}nodifferences, local_gradebookdoctor{{/str}}</div>{{/hasdifferences}}
+                    {{#hasdifferences}}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead><tr><th>{{#str}}item, local_gradebookdoctor{{/str}}</th><th>{{#str}}compare:gradea, local_gradebookdoctor{{/str}}</th><th>{{#str}}compare:gradeb, local_gradebookdoctor{{/str}}</th><th>{{#str}}compare:statusa, local_gradebookdoctor{{/str}}</th><th>{{#str}}compare:statusb, local_gradebookdoctor{{/str}}</th><th>{{#str}}compare:flags, local_gradebookdoctor{{/str}}</th></tr></thead>
+                            <tbody>
+                            {{#differences}}
+                                <tr>
+                                    <td><strong>#{{itemid}}</strong> {{label}}</td>
+                                    <td>{{afinal}}</td>
+                                    <td>{{bfinal}}</td>
+                                    <td>{{astatus}}</td>
+                                    <td>{{bstatus}}</td>
+                                    <td>
+                                        {{#aoverride}}<span class="badge bg-danger">{{#str}}compare:overridea, local_gradebookdoctor{{/str}}</span>{{/aoverride}}
+                                        {{#boverride}}<span class="badge bg-danger">{{#str}}compare:overrideb, local_gradebookdoctor{{/str}}</span>{{/boverride}}
+                                        {{#aexcluded}}<span class="badge bg-warning text-dark">{{#str}}compare:excludeda, local_gradebookdoctor{{/str}}</span>{{/aexcluded}}
+                                        {{#bexcluded}}<span class="badge bg-warning text-dark">{{#str}}compare:excludedb, local_gradebookdoctor{{/str}}</span>{{/bexcluded}}
+                                    </td>
+                                </tr>
+                            {{/differences}}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{/hasdifferences}}
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header"><strong>{{#str}}section:aiexplanation, local_gradebookdoctor{{/str}}</strong></div>
+                <div class="card-body">
+                    <p class="text-muted">{{#str}}ai:boundary, local_gradebookdoctor{{/str}}</p>
+                    {{#aiexplanationhtml}}<div class="gradebookdoctor-ai">{{{aiexplanationhtml}}}</div>{{/aiexplanationhtml}}
+                    {{#aierror}}<div class="alert alert-warning mb-0">{{aierror}}</div>{{/aierror}}
+                </div>
+            </div>
+        {{/type_compare}}
+    {{/result}}
+</div>
