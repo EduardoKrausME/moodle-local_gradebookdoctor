@@ -5,13 +5,23 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace local_gradebookdoctor;
 
+use advanced_testcase;
 use grade_category;
 use grade_grade;
 use grade_item;
 use local_gradebookdoctor\service\gradebook_inspector;
+use stdClass;
 
 /**
  * Gradebook snapshot tests.
@@ -21,17 +31,24 @@ use local_gradebookdoctor\service\gradebook_inspector;
  *
  * @package local_gradebookdoctor
  * @covers \local_gradebookdoctor\service\gradebook_inspector
+ * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class gradebook_inspector_test extends \advanced_testcase {
-    /** @var \stdClass */
-    private \stdClass $course;
+final class gradebook_inspector_test extends advanced_testcase {
+    /** @var stdClass */
+    private stdClass $course;
 
-    /** @var \stdClass */
-    private \stdClass $user;
+    /** @var stdClass */
+    private stdClass $user;
 
     /** @var grade_category */
     private grade_category $rootcategory;
 
+    /**
+     * Method setUp.
+     *
+     * @return void Return value.
+     */
     protected function setUp(): void {
         parent::setUp();
         global $CFG;
@@ -43,6 +60,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->rootcategory = grade_category::fetch_course_category($this->course->id);
     }
 
+    /**
+     * Method test_weighted_mean_uses_moodle_final_grade_and_weight_metadata.
+     *
+     * @return void Return value.
+     */
     public function test_weighted_mean_uses_moodle_final_grade_and_weight_metadata(): void {
         $this->rootcategory->aggregation = GRADE_AGGREGATE_WEIGHTED_MEAN;
         $this->rootcategory->update();
@@ -58,6 +80,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertEqualsWithDelta(75.0, (float)$children[$b->id]['weightpercent'], 0.01);
     }
 
+    /**
+     * Method test_simple_weighted_mean.
+     *
+     * @return void Return value.
+     */
     public function test_simple_weighted_mean(): void {
         $this->rootcategory->aggregation = GRADE_AGGREGATE_WEIGHTED_MEAN2;
         $this->rootcategory->update();
@@ -70,6 +97,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertSame('Simple weighted mean of grades', $tree['aggregation']);
     }
 
+    /**
+     * Method test_natural_aggregation_reports_core_result.
+     *
+     * @return void Return value.
+     */
     public function test_natural_aggregation_reports_core_result(): void {
         $this->rootcategory->aggregation = GRADE_AGGREGATE_SUM;
         $this->rootcategory->update();
@@ -83,6 +115,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertCount(2, $tree['children']);
     }
 
+    /**
+     * Method test_excluded_grade_is_reported_from_core_status.
+     *
+     * @return void Return value.
+     */
     public function test_excluded_grade_is_reported_from_core_status(): void {
         $this->rootcategory->aggregation = GRADE_AGGREGATE_MEAN;
         $this->rootcategory->update();
@@ -97,6 +134,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertSame('excluded', $children[$a->id]['aggregationstatus']);
     }
 
+    /**
+     * Method test_override_is_reported_without_recalculation.
+     *
+     * @return void Return value.
+     */
     public function test_override_is_reported_without_recalculation(): void {
         $this->rootcategory->aggregation = GRADE_AGGREGATE_MEAN;
         $this->rootcategory->update();
@@ -115,6 +157,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertEqualsWithDelta(91.0, (float)$tree['finalgrade'], 0.0001);
     }
 
+    /**
+     * Method test_hidden_and_locked_flags_are_reported.
+     *
+     * @return void Return value.
+     */
     public function test_hidden_and_locked_flags_are_reported(): void {
         $item = $this->create_item('Hidden', 100, 70);
         $item->hidden = 1;
@@ -127,6 +174,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertTrue($tree['locked']);
     }
 
+    /**
+     * Method test_formula_dependencies_are_exposed_but_value_remains_moodles.
+     *
+     * @return void Return value.
+     */
     public function test_formula_dependencies_are_exposed_but_value_remains_moodles(): void {
         $a = $this->create_item('A', 100, 80);
         $b = $this->create_item('B', 100, 40);
@@ -141,6 +193,11 @@ final class gradebook_inspector_test extends \advanced_testcase {
         $this->assertEqualsWithDelta(120.0, (float)$tree['finalgrade'], 0.0001);
     }
 
+    /**
+     * Method test_extra_credit_is_reported_for_simple_weighted_mean.
+     *
+     * @return void Return value.
+     */
     public function test_extra_credit_is_reported_for_simple_weighted_mean(): void {
         $this->rootcategory->aggregation = GRADE_AGGREGATE_WEIGHTED_MEAN2;
         $this->rootcategory->update();

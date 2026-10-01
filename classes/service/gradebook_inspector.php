@@ -5,9 +5,18 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace local_gradebookdoctor\service;
 
+use context_course;
 use grade_category;
 use grade_item;
 use moodle_exception;
@@ -398,7 +407,7 @@ class gradebook_inspector {
             return $name ? (string)$name : get_string('categorytotal', 'grades');
         }
         if (!empty($item->itemname)) {
-            return format_string((string)$item->itemname, true, ['context' => \context_course::instance($this->courseid)]);
+            return format_string((string)$item->itemname, true, ['context' => context_course::instance($this->courseid)]);
         }
         return get_string('unnameditem', 'local_gradebookdoctor', $item->id);
     }

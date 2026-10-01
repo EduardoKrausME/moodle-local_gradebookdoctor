@@ -1,6 +1,8 @@
 # Moodle Gradebook Doctor
 
-`local_gradebookdoctor` is a read-only diagnostic and explanation tool for the Moodle gradebook. It is designed for Moodle 4.5+ and depends on [`local_ai_bridge`](https://github.com/EduardoKrausME/moodle-local_ai_bridge) version `2026093001` or newer.
+`local_gradebookdoctor` is a read-only diagnostic and explanation tool for the Moodle gradebook. It is designed for
+Moodle 4.5+ and depends on [`local_ai_bridge`](https://github.com/EduardoKrausME/moodle-local_ai_bridge)
+version `2026093001` or newer.
 
 The central design rule is simple: **Moodle calculates the grade; AI only explains Moodle's result**.
 
@@ -12,7 +14,8 @@ The central design rule is simple: **Moodle calculates the grade; AI only explai
 - An enabled AI Bridge purpose with idnumber `gradebookdoctor-explain`
 - The current user must be allowed to use that purpose by AI Bridge
 
-The plugin never stores provider credentials and never calls OpenAI, Gemini, Claude, Ollama, or any other provider directly. Every AI request goes through:
+The plugin never stores provider credentials and never calls OpenAI, Gemini, Claude, Ollama, or any other provider
+directly. Every AI request goes through:
 
 ```php
 \local_ai_bridge\api::generate('gradebookdoctor-explain', $messages);
@@ -22,7 +25,8 @@ The plugin never stores provider credentials and never calls OpenAI, Gemini, Cla
 
 ### Explain this grade
 
-An authorised grader selects a user and a grade item, category total, or course total. The plugin builds a deterministic tree using Moodle gradebook records and core grade classes. The tree includes:
+An authorised grader selects a user and a grade item, category total, or course total. The plugin builds a deterministic
+tree using Moodle gradebook records and core grade classes. The tree includes:
 
 - category hierarchy;
 - grade items and category totals;
@@ -39,7 +43,8 @@ An authorised grader selects a user and a grade item, category total, or course 
 - `needsupdate` state;
 - grade formulas and referenced grade items.
 
-The AI receives a reduced JSON representation of that deterministic tree and produces a human explanation. It is explicitly instructed not to recalculate or replace Moodle's final value.
+The AI receives a reduced JSON representation of that deterministic tree and produces a human explanation. It is
+explicitly instructed not to recalculate or replace Moodle's final value.
 
 ### Diagnose gradebook
 
@@ -58,13 +63,17 @@ The deterministic diagnostic currently checks for situations such as:
 - hidden items that Moodle records as participating in aggregation;
 - unusually concentrated effective weights, using Moodle's own stored `aggregationweight`.
 
-These checks deliberately distinguish **"needs review"** from **"wrong"**. An unusual gradebook configuration can be intentional.
+These checks deliberately distinguish **"needs review"** from **"wrong"**. An unusual gradebook configuration can be
+intentional.
 
-For diagnosis, the model is required to return JSON. Invalid JSON is rejected and never replaces the deterministic findings.
+For diagnosis, the model is required to return JSON. Invalid JSON is rejected and never replaces the deterministic
+findings.
 
 ### Compare two students
 
-An authorised grader can compare two enrolled users for the same grade item or total. The comparison reports factual differences in final values, aggregation status, excluded state, overrides, locks, and effective weighting. The AI is instructed not to make judgements about either student.
+An authorised grader can compare two enrolled users for the same grade item or total. The comparison reports factual
+differences in final values, aggregation status, excluded state, overrides, locks, and effective weighting. The AI is
+instructed not to make judgements about either student.
 
 ## Security
 
@@ -74,19 +83,26 @@ Access requires all of the following in the course context:
 - `gradereport/grader:view`;
 - `moodle/grade:viewall`.
 
-This intentionally follows the core grader report access model. Students cannot use Gradebook Doctor to inspect another user's grades.
+This intentionally follows the core grader report access model. Students cannot use Gradebook Doctor to inspect another
+user's grades.
 
 All report actions that can consume AI credits use POST plus `sesskey` validation.
 
-The plugin does not modify grades, aggregation settings, formulas, exclusions, overrides, or locks. It also does not force `grade_regrade_final_grades()` from the UI; if Moodle marks an item as `needsupdate`, the plugin reports that state instead of silently changing gradebook data.
+The plugin does not modify grades, aggregation settings, formulas, exclusions, overrides, or locks. It also does not
+force `grade_regrade_final_grades()` from the UI; if Moodle marks an item as `needsupdate`, the plugin reports that
+state instead of silently changing gradebook data.
 
 ## Privacy
 
-The plugin persists no personal data of its own. It does not persist prompts or AI responses. User names are used only in the local teacher-facing interface; the AI payload does not include a user's name and labels users generically when comparing them.
+The plugin persists no personal data of its own. It does not persist prompts or AI responses. User names are used only
+in the local teacher-facing interface; the AI payload does not include a user's name and labels users generically when
+comparing them.
 
-The Privacy API is implemented as a `null_provider` because there are no plugin tables or persisted user-specific records.
+The Privacy API is implemented as a `null_provider` because there are no plugin tables or persisted user-specific
+records.
 
-AI Bridge itself may store usage metadata according to its own privacy implementation, but it does not persist prompt/response text.
+AI Bridge itself may store usage metadata according to its own privacy implementation, but it does not persist
+prompt/response text.
 
 ## Installation
 
@@ -96,7 +112,9 @@ Place the directory at:
 local/gradebookdoctor
 ```
 
-Install/upgrade Moodle normally, then configure the required AI Bridge purpose `gradebookdoctor-explain` for each tenant that should use the AI explanation. The deterministic calculation and diagnostic views remain useful even when an AI request fails.
+Install/upgrade Moodle normally, then configure the required AI Bridge purpose `gradebookdoctor-explain` for each tenant
+that should use the AI explanation. The deterministic calculation and diagnostic views remain useful even when an AI
+request fails.
 
 ## Tests
 
@@ -113,7 +131,8 @@ The PHPUnit suite covers, among other cases:
 - AI JSON parsing;
 - permissions.
 
-The aggregation tests ask Moodle to regrade the fixture gradebook and then assert that Gradebook Doctor reports Moodle's stored values and aggregation metadata.
+The aggregation tests ask Moodle to regrade the fixture gradebook and then assert that Gradebook Doctor reports Moodle's
+stored values and aggregation metadata.
 
 ## CI
 
