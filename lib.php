@@ -31,10 +31,7 @@
  * @return void
  */
 function local_gradebookdoctor_extend_navigation_course(
-    navigation_node $navigation,
-    stdClass        $course,
-    context_course  $context
-): void {
+    navigation_node $navigation, stdClass $course, context_course $context): void {
     if (!has_capability('local/gradebookdoctor:view', $context)) {
         return;
     }

@@ -158,7 +158,8 @@ class gradebook_inspector {
                 'indentrem' => min(12, $depth * 1.25),
                 'finalgrade' => $this->format_nullable_number($node['finalgrade']),
                 'rawgrade' => $this->format_nullable_number($node['rawgrade']),
-                'range' => $this->format_nullable_number($node['grademin']) . '–' . $this->format_nullable_number($node['grademax']),
+                'range' => $this->format_nullable_number($node['grademin']) . '–' .
+                    $this->format_nullable_number($node['grademax']),
                 'aggregation' => $node['aggregation'] ?: '—',
                 'aggregationstatus' => $status ?: get_string('status:notrecorded', 'local_gradebookdoctor'),
                 'statusclass' => $this->status_class($status),

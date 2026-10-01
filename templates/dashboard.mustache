@@ -29,17 +29,17 @@
 
     <ul class="nav nav-tabs mb-4" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link {{#isexplaintab}}active{{/isexplaintab}}" href="{{explainurl}}">
+            <a class="nav-link {{#isexplaintab}}active{{/isexplaintab}}" href="{{{explainurl}}}">
                 {{#str}}tab:explain, local_gradebookdoctor{{/str}}
             </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link {{#isdiagnosetab}}active{{/isdiagnosetab}}" href="{{diagnoseurl}}">
+            <a class="nav-link {{#isdiagnosetab}}active{{/isdiagnosetab}}" href="{{{diagnoseurl}}}">
                 {{#str}}tab:diagnose, local_gradebookdoctor{{/str}}
             </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link {{#iscomparetab}}active{{/iscomparetab}}" href="{{compareurl}}">
+            <a class="nav-link {{#iscomparetab}}active{{/iscomparetab}}" href="{{{compareurl}}}">
                 {{#str}}tab:compare, local_gradebookdoctor{{/str}}
             </a>
         </li>
@@ -206,7 +206,7 @@
                                         {{#extracredit}}<span class="badge bg-info text-dark">{{#str}}
                                             flag:extracredit, local_gradebookdoctor{{/str}}</span>{{/extracredit}}
                                     </td>
-                                    <td><a href="{{editurl}}">{{#str}}edit, local_gradebookdoctor{{/str}}</a></td>
+                                    <td><a href="{{{editurl}}}">{{#str}}edit, local_gradebookdoctor{{/str}}</a></td>
                                 </tr>
                             {{/rows}}
                             </tbody>
@@ -285,7 +285,7 @@
                                             <div class="small text-muted"><code>{{code}}</code></div>
                                         </td>
                                         <td>{{evidence}}</td>
-                                        <td><a href="{{url}}">{{#str}}edit, local_gradebookdoctor{{/str}}</a></td>
+                                        <td><a href="{{{url}}}">{{#str}}edit, local_gradebookdoctor{{/str}}</a></td>
                                     </tr>
                                 {{/findings}}
                                 </tbody>
