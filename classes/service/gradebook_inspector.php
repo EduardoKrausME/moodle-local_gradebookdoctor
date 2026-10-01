@@ -42,12 +42,16 @@ class gradebook_inspector {
     /** @var int Number of nodes generated for the current request. */
     private int $nodecount = 0;
 
+    /** @var int Course id. */
+    private readonly int $courseid;
+
     /**
      * Constructor.
      *
      * @param int $courseid Course id.
      */
-    public function __construct(private readonly int $courseid) {
+    public function __construct(int $courseid) {
+        $this->courseid = $courseid;
         global $CFG;
         require_once($CFG->libdir . '/gradelib.php');
     }
