@@ -97,9 +97,18 @@ $templatecontext = [
     'isexplaintab' => $mode === 'explain',
     'isdiagnosetab' => $mode === 'diagnose',
     'iscomparetab' => $mode === 'compare',
-    'explainurl' => (new moodle_url('/local/gradebookdoctor/index.php', ['courseid' => $courseid, 'mode' => 'explain']))->out(false),
-    'diagnoseurl' => (new moodle_url('/local/gradebookdoctor/index.php', ['courseid' => $courseid, 'mode' => 'diagnose']))->out(false),
-    'compareurl' => (new moodle_url('/local/gradebookdoctor/index.php', ['courseid' => $courseid, 'mode' => 'compare']))->out(false),
+    'explainurl' => (new moodle_url('/local/gradebookdoctor/index.php', [
+        'courseid' => $courseid,
+        'mode' => 'explain',
+    ]))->out(false),
+    'diagnoseurl' => (new moodle_url('/local/gradebookdoctor/index.php', [
+        'courseid' => $courseid,
+        'mode' => 'diagnose',
+    ]))->out(false),
+    'compareurl' => (new moodle_url('/local/gradebookdoctor/index.php', [
+        'courseid' => $courseid,
+        'mode' => 'compare',
+    ]))->out(false),
     'actionurl' => $baseurl->out(false),
     'users' => $useroptions,
     'items' => $itemoptions,
@@ -187,8 +196,12 @@ if ($ispostrun && $mode === 'explain' && $userid && $itemid) {
         'type_compare' => true,
         'studentaname' => fullname($ua, $canviewfullnames),
         'studentbname' => fullname($ub, $canviewfullnames),
-        'afinal' => $comparison['student_a']['finalgrade'] === null ? '—' : format_float($comparison['student_a']['finalgrade'], 5, true, true),
-        'bfinal' => $comparison['student_b']['finalgrade'] === null ? '—' : format_float($comparison['student_b']['finalgrade'], 5, true, true),
+        'afinal' => $comparison['student_a']['finalgrade'] === null
+            ? '—'
+            : format_float($comparison['student_a']['finalgrade'], 5, true, true),
+        'bfinal' => $comparison['student_b']['finalgrade'] === null
+            ? '—'
+            : format_float($comparison['student_b']['finalgrade'], 5, true, true),
         'rootlabel' => $comparison['student_a']['label'],
         'differences' => $differences,
         'hasdifferences' => !empty($differences),
