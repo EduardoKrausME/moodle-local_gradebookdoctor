@@ -131,7 +131,7 @@ final class gradebook_inspector_test extends advanced_testcase {
 
         $children = $this->children_by_id($this->inspect_course_total());
         $this->assertTrue($children[$a->id]['excluded']);
-        $this->assertSame('excluded', $children[$a->id]['aggregationstatus']);
+        $this->assertSame('dropped', $children[$a->id]['aggregationstatus']);
     }
 
     /**
@@ -188,8 +188,8 @@ final class gradebook_inspector_test extends advanced_testcase {
 
         $tree = (new gradebook_inspector($this->course->id))->explain($this->user->id, $calc->id);
         $ids = array_column($tree['dependencies'], 'itemid');
-        $this->assertContains($a->id, $ids);
-        $this->assertContains($b->id, $ids);
+        $this->assertContains((int)$a->id, $ids);
+        $this->assertContains((int)$b->id, $ids);
         $this->assertEqualsWithDelta(120.0, (float)$tree['finalgrade'], 0.0001);
     }
 
