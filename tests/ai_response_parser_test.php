@@ -45,7 +45,7 @@ final class ai_response_parser_test extends advanced_testcase {
      * @return void Return value.
      */
     public function test_parses_fenced_json_object(): void {
-        $result = ai_response_parser::parse_json_object("```json\n{\"summary\":\"ok\"}\n```");
+        $result = ai_response_parser::parse_json_object("\x60{3}json\n{\"summary\":\"ok\"}\n\x60{3}");
         $this->assertSame('ok', $result['summary']);
     }
 
