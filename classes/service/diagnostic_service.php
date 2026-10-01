@@ -30,12 +30,16 @@ use moodle_url;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class diagnostic_service {
+    /** @var int Course id. */
+    private readonly int $courseid;
+
     /**
      * Constructor.
      *
      * @param int $courseid Course id.
      */
-    public function __construct(private readonly int $courseid) {
+    public function __construct(int $courseid) {
+        $this->courseid = $courseid;
         global $CFG;
         require_once($CFG->libdir . '/gradelib.php');
     }
