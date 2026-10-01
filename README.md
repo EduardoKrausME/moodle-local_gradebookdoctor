@@ -1,25 +1,9 @@
 # Moodle Gradebook Doctor
 
 `local_gradebookdoctor` is a read-only diagnostic and explanation tool for the Moodle gradebook. It is designed for
-Moodle 4.5+ and depends on [`local_ai_bridge`](https://github.com/EduardoKrausME/moodle-local_ai_bridge)
-version `2026093001` or newer.
+Moodle and depends on [`local_ai_bridge`](https://github.com/EduardoKrausME/moodle-local_ai_bridge)
 
 The central design rule is simple: **Moodle calculates the grade; AI only explains Moodle's result**.
-
-## Requirements
-
-- Moodle 4.5+ (`2024100700`)
-- PHP supported by the target Moodle release
-- `local_ai_bridge >= 2026093001`
-- An enabled AI Bridge purpose with idnumber `gradebookdoctor-explain`
-- The current user must be allowed to use that purpose by AI Bridge
-
-The plugin never stores provider credentials and never calls OpenAI, Gemini, Claude, Ollama, or any other provider
-directly. Every AI request goes through:
-
-```php
-\local_ai_bridge\api::generate('gradebookdoctor-explain', $messages);
-```
 
 ## What it does
 
@@ -103,41 +87,3 @@ records.
 
 AI Bridge itself may store usage metadata according to its own privacy implementation, but it does not persist
 prompt/response text.
-
-## Installation
-
-Place the directory at:
-
-```text
-local/gradebookdoctor
-```
-
-Install/upgrade Moodle normally, then configure the required AI Bridge purpose `gradebookdoctor-explain` for each tenant
-that should use the AI explanation. The deterministic calculation and diagnostic views remain useful even when an AI
-request fails.
-
-## Tests
-
-The PHPUnit suite covers, among other cases:
-
-- weighted mean;
-- Natural aggregation;
-- simple weighted mean;
-- excluded grades;
-- manual overrides;
-- hidden and locked states;
-- formula dependencies;
-- extra credit;
-- AI JSON parsing;
-- permissions.
-
-The aggregation tests ask Moodle to regrade the fixture gradebook and then assert that Gradebook Doctor reports Moodle's
-stored values and aggregation metadata.
-
-## CI
-
-GitHub Actions runs PHP syntax checks and `EduardoKrausME/moodle-plugin-validate` on pushes and pull requests.
-
-## License
-
-GNU GPL v3 or later.
