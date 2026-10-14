@@ -68,7 +68,8 @@ Access requires all of the following in the course context:
 - `moodle/grade:viewall`.
 
 This intentionally follows the core grader report access model. Students cannot use Gradebook Doctor to inspect another
-user's grades.
+user's grades. In separate groups mode, graders without `moodle/site:accessallgroups` may only select and inspect
+active enrolled students from their own groups, including when submitting requests directly.
 
 All report actions that can consume AI credits use POST plus `sesskey` validation.
 
@@ -82,8 +83,14 @@ The plugin persists no personal data of its own. It does not persist prompts or 
 in the local teacher-facing interface; the AI payload does not include a user's name and labels users generically when
 comparing them.
 
-The Privacy API is implemented as a `null_provider` because there are no plugin tables or persisted user-specific
-records.
+The Privacy API declares the external transfer of student grade facts through `local_ai_bridge`, even though this
+plugin has no tables of its own and does not persist user-specific reports.
 
 AI Bridge itself may store usage metadata according to its own privacy implementation, but it does not persist
 prompt/response text.
+
+## Moodle installable ZIP
+
+GitHub's automatic **Source code (zip)** archive is a repository snapshot, not a Moodle plugin installer ZIP. For
+Moodle's web installer, use the `local_gradebookdoctor.zip` release asset instead. The release workflow constructs
+this asset with `gradebookdoctor/` as the root directory.
