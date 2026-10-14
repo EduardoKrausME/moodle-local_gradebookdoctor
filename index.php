@@ -52,7 +52,6 @@ $PAGE->set_url(new moodle_url('/local/gradebookdoctor/index.php', ['courseid' =>
 $PAGE->set_pagelayout('report');
 $PAGE->set_title(get_string('pluginname', 'local_gradebookdoctor'));
 $PAGE->set_heading(format_string($course->fullname));
-$PAGE->requires->css('/local/gradebookdoctor/styles.css');
 
 $inspector = new gradebook_inspector($courseid);
 $aiservice = new ai_service();
