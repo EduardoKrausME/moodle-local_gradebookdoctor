@@ -58,7 +58,7 @@ class access_service {
         $context = context_course::instance($courseid);
         $course = get_course($courseid);
         $allowedids = null;
-        if (groups_get_course_groupmode($course) === SEPARATEGROUPS &&
+        if ((int) groups_get_course_groupmode($course) === SEPARATEGROUPS &&
                 !has_capability('moodle/site:accessallgroups', $context)) {
             $groups = groups_get_all_groups($courseid, $USER->id, 0, 'g.id');
             if (empty($groups)) {

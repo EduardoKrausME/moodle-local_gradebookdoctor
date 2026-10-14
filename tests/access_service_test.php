@@ -91,7 +91,7 @@ final class access_service_test extends advanced_testcase {
         assign_capability('moodle/site:accessallgroups', CAP_PROHIBIT, $roleid, $context->id, true);
         accesslib_clear_all_caches_for_unit_testing();
         $this->setUser($teacher);
-        $this->assertSame(SEPARATEGROUPS, groups_get_course_groupmode(get_course($course->id)));
+        $this->assertSame(SEPARATEGROUPS, (int) groups_get_course_groupmode(get_course($course->id)));
         $this->assertFalse(has_capability('moodle/site:accessallgroups', $context));
 
         $users = access_service::get_course_users($course->id);
@@ -123,7 +123,7 @@ final class access_service_test extends advanced_testcase {
         assign_capability('moodle/site:accessallgroups', CAP_PROHIBIT, $roleid, $context->id, true);
         accesslib_clear_all_caches_for_unit_testing();
         $this->setUser($teacher);
-        $this->assertSame(SEPARATEGROUPS, groups_get_course_groupmode(get_course($course->id)));
+        $this->assertSame(SEPARATEGROUPS, (int) groups_get_course_groupmode(get_course($course->id)));
         $this->assertFalse(has_capability('moodle/site:accessallgroups', $context));
 
         $this->assertSame([], access_service::get_course_users($course->id));
