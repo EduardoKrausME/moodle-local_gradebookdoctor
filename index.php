@@ -56,15 +56,10 @@ $PAGE->set_heading(format_string($course->fullname));
 $inspector = new gradebook_inspector($courseid);
 $aiservice = new ai_service();
 $items = $inspector->get_items();
-$users = get_enrolled_users(
-    $context,
-    '',
-    0,
+$users = access_service::get_course_users(
+    $courseid,
     'u.id,u.firstname,u.lastname,u.firstnamephonetic,u.lastnamephonetic,u.middlename,u.alternatename',
-    'u.lastname ASC, u.firstname ASC',
-    0,
-    0,
-    true
+    'u.lastname ASC, u.firstname ASC'
 );
 
 $itemoptions = [];

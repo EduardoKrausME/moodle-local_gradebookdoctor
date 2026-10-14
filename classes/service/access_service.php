@@ -41,15 +41,53 @@ class access_service {
     }
 
     /**
-     * Assert that the target user belongs to the course context.
+     * Get only active enrolled users the current grader is permitted to inspect.
+     *
+     * For separate groups, an observer without accessallgroups can see students
+     * sharing at least one of their groups. The group filter is enforced on the
+     * server to protect direct POST requests as well as the displayed user lists.
+     *
+     * @param int $courseid Course id.
+     * @param string $fields Fields for the enrolled-user query.
+     * @param string $sort Sort expression for the enrolled-user query.
+     * @return array Users visible to the current grader, keyed by user id.
+     */
+    public static function get_course_users(int $courseid, string $fields = 'u.id', string $sort = ''): array {
+        global $DB, $USER;
+
+        $context = context_course::instance($courseid);
+        $course = get_course($courseid);
+        $allowedids = null;
+        if (groups_get_course_groupmode($course) === SEPARATEGROUPS &&
+                !has_capability('moodle/site:accessallgroups', $context)) {
+            $groups = groups_get_all_groups($courseid, $USER->id, 0, 'g.id');
+            if (empty($groups)) {
+                return [];
+            }
+            [$insql, $params] = $DB->get_in_or_equal(array_keys($groups), SQL_PARAMS_NAMED, 'gbdgroup');
+            $memberids = $DB->get_fieldset_sql(
+                "SELECT DISTINCT userid FROM {groups_members} WHERE groupid $insql",
+                $params
+            );
+            if (empty($memberids)) {
+                return [];
+            }
+            $allowedids = array_fill_keys(array_map('intval', $memberids), true);
+        }
+
+        $users = get_enrolled_users($context, '', 0, $fields, $sort, 0, 0, true);
+        return $allowedids === null ? $users : array_intersect_key($users, $allowedids);
+    }
+
+    /**
+     * Require an active enrolled user visible under the course group rules.
      *
      * @param int $courseid Course id.
      * @param int $userid User id.
      * @return void
      */
     public static function require_course_user(int $courseid, int $userid): void {
-        $context = context_course::instance($courseid);
-        $users = get_enrolled_users($context, '', 0, 'u.id', null, 0, 0, true);
+        $users = self::get_course_users($courseid);
         if (!isset($users[$userid])) {
             throw new moodle_exception('error:usernotincourse', 'local_gradebookdoctor');
         }
