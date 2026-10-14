@@ -88,8 +88,11 @@ final class access_service_test extends advanced_testcase {
 
         $context = context_course::instance($course->id);
         $roleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher'], MUST_EXIST);
-        assign_capability('moodle/site:accessallgroups', CAP_PROHIBIT, $roleid, $context->id);
+        assign_capability('moodle/site:accessallgroups', CAP_PROHIBIT, $roleid, $context->id, true);
+        accesslib_clear_all_caches_for_unit_testing();
         $this->setUser($teacher);
+        $this->assertSame(SEPARATEGROUPS, groups_get_course_groupmode(get_course($course->id)));
+        $this->assertFalse(has_capability('moodle/site:accessallgroups', $context));
 
         $users = access_service::get_course_users($course->id);
         $this->assertArrayHasKey($studenta->id, $users);
@@ -117,8 +120,11 @@ final class access_service_test extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($student->id, $course->id, 'student');
         $context = context_course::instance($course->id);
         $roleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher'], MUST_EXIST);
-        assign_capability('moodle/site:accessallgroups', CAP_PROHIBIT, $roleid, $context->id);
+        assign_capability('moodle/site:accessallgroups', CAP_PROHIBIT, $roleid, $context->id, true);
+        accesslib_clear_all_caches_for_unit_testing();
         $this->setUser($teacher);
+        $this->assertSame(SEPARATEGROUPS, groups_get_course_groupmode(get_course($course->id)));
+        $this->assertFalse(has_capability('moodle/site:accessallgroups', $context));
 
         $this->assertSame([], access_service::get_course_users($course->id));
         $this->expectException(\moodle_exception::class);
