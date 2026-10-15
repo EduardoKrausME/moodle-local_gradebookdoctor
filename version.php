@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->release = '1.1.4';
-$plugin->version = 2026101401;
+$plugin->release = '1.1.5';
+$plugin->version = 2026101402;
 $plugin->component = 'local_gradebookdoctor';
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
